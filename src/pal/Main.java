@@ -25,12 +25,18 @@ public class Main {
         String line;
         char[] chars;
         Node node;
+        int counter = 0;
         while ((line = br.readLine()) != null) {
+            if (counter > 7500) {
+                System.out.println("ERROR");
+                System.exit(0);
+            }
             chars = line.toCharArray();
             list.add(chars);
             if (line.startsWith("\t")) {
                 continue;
             }
+            counter++;
             node = new Node(pattern.split(line), chars);
             if (start == null) {
                 start = node;
