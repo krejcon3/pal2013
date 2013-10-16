@@ -14,7 +14,6 @@ public class Main {
     public static int edgeCount = 0;
 
     public static void main(String[] args) throws IOException {
-        System.setIn(new FileInputStream("file.txt"));
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String line;
         StringTokenizer st;
@@ -93,7 +92,7 @@ public class Main {
 
     public static void euler(int start) {
         Stack<Integer> s = edges.get(start);
-        if (s != null && !s.empty()) {
+        while (s != null && !s.empty()) {
             int end = s.pop();
             euler(end);
             stack.push(end);
