@@ -7,9 +7,9 @@ public class Main {
     public static String[] start = null;
     public static String[] end = null;
     public static Permutation permutation;
-    public static BinomialHeap heap;
 
     public static void main(String[] args) throws IOException {
+//        System.setIn(new FileInputStream("file.txt"));
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String line;
         while ((line = br.readLine()) != null) {
@@ -27,26 +27,7 @@ public class Main {
             }
         }
         permutation = new Permutation(start, end, nm[1]);
-        int[] p;
-        int maxDiff = 0;
-        int tDiff;
-        int[] maxPerm = new int[0];
-        while ((p = permutation.getNextExtendedPermutation(nm[0])) != null) {
-            heap = new BinomialHeap();
-            for(int n : p) {
-                heap.add(n);
-            }
-            tDiff = heap.getDiff();
-            if (tDiff > maxDiff) {
-                maxDiff = tDiff;
-                maxPerm = p;
-            }
-        }
-        System.out.println(maxDiff);
-        for (int i = 0; i < nm[1]; i++) {
-            System.out.print(maxPerm[i] + " ");
-        }
-        System.out.println();
+        permutation.printDiffFinal(nm);
     }
 }
 

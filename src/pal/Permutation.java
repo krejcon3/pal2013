@@ -1,7 +1,5 @@
 package pal;
 
-import java.util.Arrays;
-
 public class Permutation {
     private int[] startPermutation;
     private int[] endPermutation;
@@ -20,12 +18,21 @@ public class Permutation {
         }
     }
 
+    public boolean more(int[] first, int[] second) {
+        for (int i = 0; i < first.length; i++) {
+            if (first[i] != second[i]) {
+                return first[i] > second[i];
+            }
+        }
+        return true;
+    }
+
     public int[] getNextPermutation() {
         if (this.cycle == 0) {
             this.cycle++;
             return this.startPermutation;
         }
-        if (Arrays.equals(this.startPermutation, this.endPermutation)) {
+        if (this.more(this.startPermutation, this.endPermutation)) {
             return null;
         }
         this.cycle++;
@@ -51,6 +58,31 @@ public class Permutation {
             }
         }
         return null;
+    }
+
+    public void printDiffFinal(int[] nm) {
+        int[] p;
+        int maxDiff = 0;
+        int tDiff;
+        int[] maxPerm = new int[0];
+        BinomialHeap heap;
+        while ((p = this.getNextPermutation()) != null) {
+            heap = new BinomialHeap();
+            for(int i = 0; i < nm[0]; i++) {
+                heap.add(p[i % p.length] + (i / p.length * p.length));
+            }
+            tDiff = heap.getDiff();
+
+            if (tDiff > maxDiff) {
+                maxDiff = tDiff;
+                maxPerm = p.clone();
+            }
+        }
+        System.out.println(maxDiff);
+        for (int i = 0; i < nm[1]; i++) {
+            System.out.print(maxPerm[i] + " ");
+        }
+        System.out.println();
     }
 
     public int[] getNextExtendedPermutation(int epLength) {

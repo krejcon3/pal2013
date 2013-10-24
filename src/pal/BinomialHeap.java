@@ -9,7 +9,7 @@ public class BinomialHeap {
         } else {
             Node old = root;
             root = new Node(content);
-            root.setPartner(old);
+            root.partner = old;
             this.plus(root);
         }
     }
@@ -18,33 +18,33 @@ public class BinomialHeap {
         Node actual = root;
         int sumDiff = 0;
         while (actual != null) {
-            sumDiff += actual.getMax() - actual.getContent();
-            actual = actual.getPartner();
+            sumDiff += actual.max - actual.content;
+            actual = actual.partner;
         }
         return sumDiff;
     }
 
     private boolean compare(Node a, Node b) {
-        return a.getContent() < b.getContent();
+        return a.content < b.content;
     }
 
     private void plus(Node start) {
         Node actual = start;
-        while (actual.getPartner() != null && actual.getLevel() == actual.getPartner().getLevel()) {
+        while (actual.partner != null && actual.level == actual.partner.level) {
             Node temp;
-            if (this.compare(actual, actual.getPartner())) {
-                temp = actual.getPartner();
-                actual.setPartner(temp.getPartner());
+            if (this.compare(actual, actual.partner)) {
+                temp = actual.partner;
+                actual.partner = temp.partner;
             } else {
                 temp = actual;
-                actual = temp.getPartner();
+                actual = temp.partner;
             }
-            temp.setPartner(null);
-            if (actual.getMax() < temp.getMax()) {
-                actual.setMax(temp.getMax());
+            temp.partner = null;
+            if (actual.max < temp.max) {
+                actual.max = temp.max;
             }
-            actual.addChild(temp);
-            actual.setLevel(actual.getLevel() + 1);
+            actual.childs.add(temp);
+            actual.level++;
             root = actual;
         }
     }
