@@ -12,8 +12,6 @@ public class Permutation {
         this.endPermutation = new int[this.length];
         for (int i = 0; i < this.length; i++) {
             this.startPermutation[i] = Integer.parseInt(start[i]);
-        }
-        for (int i = 0; i < this.length; i++) {
             this.endPermutation[i] = Integer.parseInt(end[i]);
         }
     }
@@ -83,30 +81,6 @@ public class Permutation {
             System.out.print(maxPerm[i] + " ");
         }
         System.out.println();
-    }
-
-    public int[] getNextExtendedPermutation(int epLength) {
-        int[] p = this.getNextPermutation();
-        if (p == null) {
-            return null;
-        }
-        int[] ep = new int[epLength];
-        for (int i = 0; i < ep.length; i++) {
-            ep[i] = p[i % p.length] + (i / p.length * p.length) ;
-        }
-        return ep;
-    }
-
-    public int getNextExtendedPermutationNumber(int epLength) {
-        int[] p = this.getNextPermutation();
-        if (p == null) {
-            return -1;
-        }
-        int ep = 0;
-        for (int i = 0; i < epLength; i++) {
-            ep += (p[i % p.length] + (i / p.length * p.length)) * Math.pow(10, epLength - 1 - i);
-        }
-        return ep;
     }
 
     private int[] swap(int i, int j, int[] array) {

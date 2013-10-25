@@ -1,51 +1,40 @@
 package pal;
 
 public class BinomialHeap {
-    private Node root = null;
+    private int[] fakeHeap = new int[22];
+    private int[] maximas = new int[22];
 
-    public void add(int content) {
-        if (root == null) {
-            root = new Node(content);
-        } else {
-            Node old = root;
-            root = new Node(content);
-            root.partner = old;
-            this.plus(root);
+    public BinomialHeap() {
+        for (int i = 0; i < this.fakeHeap.length; i++) {
+            this.fakeHeap[i] = -1;
+            this.maximas[i] = -1;
         }
+    }
+    public void add(int content) {
+        int it = 0;
+        int locMax = content;
+        while (this.fakeHeap[it] != -1) {
+            if (content > this.fakeHeap[it]) {
+                content = this.fakeHeap[it];
+            }
+            if (locMax < this.maximas[it]) {
+                locMax = this.maximas[it];
+            }
+            this.fakeHeap[it] = -1;
+            this.maximas[it] = -1;
+            it++;
+        }
+        this.fakeHeap[it] = content;
+        this.maximas[it] = locMax;
     }
 
     public int getDiff() {
-        Node actual = root;
-        int sumDiff = 0;
-        while (actual != null) {
-            sumDiff += actual.max - actual.content;
-            actual = actual.partner;
-        }
-        return sumDiff;
-    }
-
-    private boolean compare(Node a, Node b) {
-        return a.content < b.content;
-    }
-
-    private void plus(Node start) {
-        Node actual = start;
-        while (actual.partner != null && actual.level == actual.partner.level) {
-            Node temp;
-            if (this.compare(actual, actual.partner)) {
-                temp = actual.partner;
-                actual.partner = temp.partner;
-            } else {
-                temp = actual;
-                actual = temp.partner;
+        int sum = 0;
+        for (int i = 0; i < this.fakeHeap.length; i++) {
+            if (this.fakeHeap[i] != -1) {
+                sum += this.maximas[i] - this.fakeHeap[i];
             }
-            temp.partner = null;
-            if (actual.max < temp.max) {
-                actual.max = temp.max;
-            }
-            actual.childs.add(temp);
-            actual.level++;
-            root = actual;
         }
+        return sum;
     }
 }
