@@ -6,9 +6,10 @@ import java.util.StringTokenizer;
 
 public class Main {
 
-    public static HashMap<Integer, double[]> edges = new HashMap<Integer, double[]>();
+    public static HashMap<Integer, int[]> edges = new HashMap<Integer, int[]>();
     public static int vertexCount = -1;
     public static int edgeCount = 0;
+    public static int[] kombination;
 
     public static void main(String[] args) throws IOException {
         System.setIn(new FileInputStream("file.txt"));
@@ -18,71 +19,45 @@ public class Main {
         if ((line = br.readLine()) != null) {
             st = new StringTokenizer(line);
             vertexCount = Integer.parseInt(st.nextToken());
+            kombination = new int[vertexCount - 1];
+            for (int i = 0; i < vertexCount - 1; i++) {
+                kombination[i] = i;
+            }
         }
-        int start, end;
-        double[] edge;
+        int[] edge;
         while (!(line = br.readLine()).equals("0 0")) {
+            edge = new int[2];
             st = new StringTokenizer(line);
-            edge = new double[vertexCount - 1];
-            start = Integer.parseInt(st.nextToken());
-            end = Integer.parseInt(st.nextToken());
-            if (start < edge.length) {
-                edge[start] = 1;
-            }
-            if (end < edge.length) {
-                edge[end] = -1;
-            }
+            edge[0] = Integer.parseInt(st.nextToken());
+            edge[1] = Integer.parseInt(st.nextToken());
             edges.put(edgeCount++, edge);
         }
-        calc();
+        while (kombination != null) {
+            print(kombination);
+            kombination = KSubsetLexSuccessor(kombination, edgeCount, vertexCount - 1);
+        }
     }
 
-    public static void calc() {
-        int sum = 0;
-        char[] ary;
-        double[][] m = new double[vertexCount - 1][];
-        int counter;
-        int from = 0;
-        int to = (int) Math.pow(2, edgeCount);
-        for (int i = from; i < to; i++) {
-            if (Integer.bitCount(i) == vertexCount - 1) {
-                counter = 0;
-                ary = Integer.toBinaryString(i).toCharArray();
-                for (int j = 0; j < ary.length; j++) {
-                    if (ary[j] == '1') {
-                        m[counter++] = edges.get(((edgeCount) - ary.length) + j);
-                    }
-                }
-                if (isTree(m)) {
-                    sum++;
-                }
+    public static int[] KSubsetLexSuccessor(int[] T, int n, int k) {
+        int[] U = T.clone();
+        int i = k - 1;
+        while (i >= 0 && T[i] >= n - k + i) {
+            i--;
+        }
+        if (i < 0) {
+            return null;
+        } else {
+            for (int j = i; j < k; j++) {
+                U[j] = T[i] + 1 + j - i;
             }
+            return U;
         }
-        System.out.println(sum);
     }
 
-    public static boolean isTree(double[][] mat) {
-        return ((int)Math.round(determinant(mat))) != 0;
-    }
-
-    public static double determinant(double[][] mat) {
-        double result = 0;
-        if(mat.length == 1) {
-            result = mat[0][0];
-            return result;
+    public static void print(int[] array) {
+        for (int i = 0; i < array.length; i++) {
+            System.out.print(array[i] + " ");
         }
-        if(mat.length == 2) {
-            result = mat[0][0] * mat[1][1] - mat[0][1] * mat[1][0];
-            return result;
-        }
-        for(int i = 0; i < mat[0].length; i++) {
-            double temp[][] = new double[mat.length - 1][mat[0].length - 1];
-            for(int j = 1; j < mat.length; j++) {
-                System.arraycopy(mat[j], 0, temp[j-1], 0, i);
-                System.arraycopy(mat[j], i+1, temp[j-1], i, mat[0].length-i-1);
-            }
-            result += mat[0][i] * Math.pow(-1, i) * determinant(temp);
-        }
-        return result;
+        System.out.println();
     }
 }
