@@ -48,62 +48,58 @@ public class Component {
         int earnings = 0;
         for (Node first : this.towns) {
             for (Node second : this.towns) {
-                if (first.name == second.name) {
-                    earnings = Main.costs[first.name - 1][1] - Main.costs[first.name - 1][0];
+                if (first.name != second.name) {
+                    earnings = Main.costs[first.name - 1][1] - first.getCostOfWayToNode(second.name) - Main.costs[first.name - 1][0] + Main.costs[second.name - 1][1];
                 } else {
-                    earnings = Main.costs[first.name - 1][1] + Main.costs[second.name - 1][1] - Main.costs[first.name - 1][0] - first.getCostOfWayToNode(second.name);
+                    earnings = Main.costs[first.name - 1][1] - Main.costs[first.name - 1][0];
                 }
-                Main.maxEarnings = Math.max(earnings, Main.maxEarnings);
+                Main.maxEarnings = Math.max(Main.maxEarnings, earnings);
                 for (Node output : this.outputs) {
                     int outputEarnings = earnings;
                     if (output.name != second.name) {
                         outputEarnings -= second.getCostOfWayToNode(output.name);
                     }
-                    output.maxEarnings = Math.max(outputEarnings, output.maxEarnings);
-
+                    output.maxEarnings = Math.max(output.maxEarnings, outputEarnings);
                 }
             }
         }
-        int tEarnings = 0;
         for (Node input : this.inputs) {
-            if (input.bonusEarnings > Main.costs[input.name - 1][0]) {
+            if (input.bonusEarnings > 0) {
                 for (Node first : this.towns) {
-                    if (input.name == first.name) {
-                        tEarnings = Main.costs[first.name - 1][1] - Main.costs[first.name - 1][0] + input.bonusEarnings;
-                    } else {
-                        tEarnings = Main.costs[first.name - 1][1] - Main.costs[input.name - 1][0] - input.getCostOfWayToNode(first.name) + input.bonusEarnings;
-                    }
                     for (Node second : this.towns) {
-                        earnings = tEarnings;
+                        if (input.name != first.name) {
+                            earnings = input.bonusEarnings - input.getCostOfWayToNode(first.name) - Main.costs[input.name - 1][0] + Main.costs[first.name - 1][1];
+                        } else {
+                            earnings = input.bonusEarnings - Main.costs[input.name - 1][0] + Main.costs[first.name - 1][1];
+                        }
                         if (first.name != second.name) {
                             earnings += Main.costs[second.name - 1][1] - first.getCostOfWayToNode(second.name);
                         }
-                        Main.maxEarnings = Math.max(earnings, Main.maxEarnings);
+                        Main.maxEarnings = Math.max(Main.maxEarnings, earnings);
                         for (Node output : this.outputs) {
-                            if (second.name != output.name) {
-                                output.maxEarnings = Math.max(output.maxEarnings, earnings - second.getCostOfWayToNode(output.name));
-                            } else {
-                                output.maxEarnings = Math.max(output.maxEarnings, earnings);
+                            int outputEarnings = earnings;
+                            if (output.name != second.name) {
+                                outputEarnings -= second.getCostOfWayToNode(output.name);
                             }
+                            output.maxEarnings = Math.max(output.maxEarnings, outputEarnings);
                         }
                     }
                 }
-            }
-            for (Node output : this.outputs) {
-                if (input.name == output.name) {
-                    earnings = input.bonusEarnings - Main.costs[input.name - 1][0];
-                } else {
-                    earnings = input.bonusEarnings - input.getCostOfWayToNode(output.name) - Main.costs[input.name - 1][0];
+                for (Node output : this.outputs) {
+                    if (input.name == output.name) {
+                        earnings = input.bonusEarnings - Main.costs[input.name - 1][0];
+                    } else {
+                        earnings = input.bonusEarnings - input.getCostOfWayToNode(output.name) - Main.costs[input.name - 1][0];
+                    }
+//                    System.out.println(input.name + "(" + input.bonusEarnings + ")" + output.name + "=" + earnings);
+                    output.maxEarnings = Math.max(output.maxEarnings, earnings);
                 }
-                output.maxEarnings = Math.max(output.maxEarnings, earnings);
             }
         }
         for (Node output : this.outputs) {
-            if (output.maxEarnings > 0) {
-                for (Node child : output.childs) {
-                    if (child.componentIndex != output.componentIndex) {
-                        child.bonusEarnings = output.maxEarnings;
-                    }
+            for (Node child : output.childs) {
+                if (child.componentIndex != output.componentIndex) {
+                    child.bonusEarnings = output.maxEarnings;
                 }
             }
         }

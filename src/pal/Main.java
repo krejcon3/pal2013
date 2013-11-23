@@ -25,14 +25,14 @@ public class Main {
             dijsktra.run(component);
         }
         getBestWay();
-        for (Component component : tarjan.components) {
-            Printer.printComponentInputsBonuses(component);
-        }
+//        for (Component component : tarjan.components) {
+//            Printer.printComponentInputsBonuses(component);
+//        }
         System.out.println(maxEarnings);
     }
 
     public static void read() throws IOException {
-        System.setIn(new FileInputStream("file.txt"));
+        System.setIn(new FileInputStream("file3.in"));
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String line;
         StringTokenizer st;
