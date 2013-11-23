@@ -53,4 +53,36 @@ public class Printer {
         }
         System.out.println();
     }
+
+    public static void printComponentNodesWithCosts(Component component) {
+        for (Node node : component.inputs) {
+            System.out.println(node.name + ":");
+            for (Node town : component.towns) {
+                System.out.println(town.name + " (" + node.getCostOfWayToNode(town.name) + ")");
+            }
+            for (Node output : component.outputs) {
+                System.out.println(output.name + " (" + node.getCostOfWayToNode(output.name) + ")");
+            }
+            System.out.println();
+        }
+        System.out.println();
+        for (Node node : component.towns) {
+            System.out.println(node.name + ":");
+            for (Node town : component.towns) {
+                System.out.println(town.name + " (" + node.getCostOfWayToNode(town.name) + ")");
+            }
+            for (Node output : component.outputs) {
+                System.out.println(output.name + " (" + node.getCostOfWayToNode(output.name) + ")");
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
+
+    public static void printComponentInputsBonuses(Component component) {
+        for (Node node : component.inputs) {
+            System.out.print(node.name + "(" + node.bonusEarnings + ")" + ",");
+        }
+        System.out.println();
+    }
 }

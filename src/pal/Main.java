@@ -13,33 +13,26 @@ public class Main {
     public static HashMap<Integer, Node> nodes;
     public static Tarjan tarjan;
     public static Dijsktra dijsktra;
+    public static int maxEarnings = 0;
 
 
     public static void main(String[] args) throws IOException {
         read();
-        Printer.printTreeChilds(nodes);
-        System.out.println("------------");
         tarjan = new Tarjan();
         tarjan.run();
-        System.out.println("------------");
-        for (Component component : tarjan.components) {
-            Printer.printComponent(component);
-            System.out.print("Inputs: ");
-            Printer.printComponentInputs(component);
-            System.out.print("Outputs: ");
-            Printer.printComponentOutputs(component);
-            System.out.print("Towns: ");
-            Printer.printComponentTowns(component);
-        }
-        System.out.println("Components count: " + tarjan.countComponent());
         dijsktra = new Dijsktra();
         for (Component component : tarjan.components) {
-            dijsktra.setComponent(component);
+            dijsktra.run(component);
         }
+        getBestWay();
+        for (Component component : tarjan.components) {
+            Printer.printComponentInputsBonuses(component);
+        }
+        System.out.println(maxEarnings);
     }
 
     public static void read() throws IOException {
-        System.setIn(new FileInputStream("file2.txt"));
+        System.setIn(new FileInputStream("file.txt"));
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String line;
         StringTokenizer st;
@@ -92,6 +85,12 @@ public class Main {
                 nodes.get(ar[0]).addChild(nodes.get(ar[1]));
             }
             counter++;
+        }
+    }
+
+    public static void getBestWay() {
+        for (int i = tarjan.countComponent() - 1; i >= 0; i--) {
+            tarjan.getComponent(i).getBestWay();
         }
     }
 }

@@ -6,7 +6,7 @@ public class Tarjan {
     private Node stackTop;
     private int count;
     private int index;
-    public ArrayList<Component> components = new ArrayList<Component>(1000);
+    public ArrayList<Component> components = new ArrayList<Component>(5000);
 
     public Tarjan() {
         this.stackTop = null;
@@ -15,6 +15,9 @@ public class Tarjan {
     }
 
     public void run() {
+        this.stackTop = null;
+        this.count = 0;
+        this.index = 0;
         for (int i = 1; i <= Main.pointCount; i++) {
             Node no = Main.nodes.get(i);
             if (no.index == 0) {
