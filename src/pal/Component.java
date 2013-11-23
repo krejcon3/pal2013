@@ -60,7 +60,6 @@ public class Component {
                         outputEarnings -= second.getCostOfWayToNode(output.name);
                     }
                     output.maxEarnings = Math.max(outputEarnings, output.maxEarnings);
-
                 }
             }
         }
@@ -102,7 +101,7 @@ public class Component {
             if (output.maxEarnings > 0) {
                 for (Node child : output.childs) {
                     if (child.componentIndex != output.componentIndex) {
-                        child.bonusEarnings = output.maxEarnings;
+                        child.bonusEarnings = Math.max(output.maxEarnings, child.bonusEarnings);
                     }
                 }
             }

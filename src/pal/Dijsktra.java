@@ -20,6 +20,7 @@ public class Dijsktra {
         for (Node node : this.component.nodes) {
             node.resetDijsktra();
         }
+        priorityQueue = new PriorityQueue<Node>();
         start.dijsktra_distance = 0;
         this.priorityQueue.add(start);
         start.addWayCost(start.name, start.dijsktra_distance);
@@ -27,12 +28,14 @@ public class Dijsktra {
             Node node = this.priorityQueue.poll();
             node.isDijsktra_visited = true;
             for (Node child : node.childs) {
-                int alt = node.dijsktra_distance + Main.costs[child.name - 1][0];
-                if (alt < child.dijsktra_distance && !child.isDijsktra_visited) {
-                    child.dijsktra_distance = alt;
-                    this.priorityQueue.add(child);
-                    if (child.isTown || child.isOutput) {
-                        start.addWayCost(child.name, child.dijsktra_distance);
+                if (child.componentIndex == start.componentIndex) {
+                    int alt = node.dijsktra_distance + Main.costs[child.name - 1][0];
+                    if (alt < child.dijsktra_distance && !child.isDijsktra_visited) {
+                        child.dijsktra_distance = alt;
+                        this.priorityQueue.add(child);
+                        if (child.isTown || child.isOutput) {
+                            start.addWayCost(child.name, child.dijsktra_distance);
+                        }
                     }
                 }
             }

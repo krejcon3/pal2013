@@ -15,10 +15,9 @@ public class Tarjan {
     }
 
     public void run() {
-        this.stackTop = null;
-        this.count = 0;
-        this.index = 0;
         for (int i = 1; i <= Main.pointCount; i++) {
+            this.stackTop = null;
+            this.index = 0;
             Node no = Main.nodes.get(i);
             if (no.index == 0) {
                 this.find_scc(no);
